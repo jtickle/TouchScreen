@@ -25,7 +25,7 @@ void loop(void) {
   
   // we have some minimum pressure we consider 'valid'
   // pressure of 0 means no pressing!
-  if (p.z > ts.pressureThreshhold) {
+  if (p.z > ts.pressureThreshold) {
      Serial.print("X = "); Serial.print(p.x);
      Serial.print("\tY = "); Serial.print(p.y);
      Serial.print("\tPressure = "); Serial.println(p.z);
