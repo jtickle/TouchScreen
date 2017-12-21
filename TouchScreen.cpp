@@ -192,7 +192,7 @@ TouchScreen::TouchScreen(uint8_t xp, uint8_t yp, uint8_t xm, uint8_t ym,
   ym_pin = digitalPinToBitMask(_ym);
 #endif
 
-  pressureThreshhold = 10;
+  pressureThreshold = 10;
 }
 
 int TouchScreen::readTouchX(void) {
@@ -243,6 +243,8 @@ uint16_t TouchScreen::pressure(void) {
   int z1 = analogRead(_xm); 
   int z2 = analogRead(_yp);
 
+  uint16_t retval;
+
   if (_rxplate != 0) {
     // now read the x 
     float rtouch;
@@ -253,8 +255,25 @@ uint16_t TouchScreen::pressure(void) {
     rtouch *= _rxplate;
     rtouch /= 1024;
     
-    return rtouch;
+    retval = rtouch;
   } else {
-    return (1023-(z2-z1));
+    retval = (1023-(z2-z1));
   }
+
+  //Clean the touchScreen settings after function is used
+  //Because LCD may use the same pins
+  pinMode(_xm, OUTPUT);
+  digitalWrite(_xm, LOW);
+  pinMode(_yp, OUTPUT);
+  digitalWrite(_yp, HIGH);
+  pinMode(_ym, OUTPUT);
+  digitalWrite(_ym, LOW);
+  pinMode(_xp, OUTPUT);
+  digitalWrite(_xp, HIGH);
+
+  return retval;
+}
+
+bool TouchScreen::isTouching(void) {
+  return pressure() > pressureThreshold;
 }

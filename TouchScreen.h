@@ -42,7 +42,7 @@ class TouchScreen {
   int readTouchY();
   int readTouchX();
   TSPoint getPoint();
-  int16_t pressureThreshhold;
+  int16_t pressureThreshold;
 
 private:
   uint8_t _yp, _ym, _xm, _xp;
